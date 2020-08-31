@@ -1,0 +1,196 @@
+drop table if exists `${database}`.`address`;
+create table if not exists `${database}`.`address` (
+    addressid mediumint(8) unsigned not null auto_increment,
+    countryid smallint(4) unsigned not null,
+    regionid smallint(4) unsigned null default null,
+    city varchar(64) null default null,
+    county varchar(64) null default null,
+    streetAddress varchar(64) null default null, 
+    fax varchar(32)  null default null,
+    postalCode varchar(32) null default null,
+    datecreated datetime not null,
+    timemodified timestamp not null default current_timestamp on update current_timestamp,
+    primary key(addressid)
+)ENGINE=INNODB DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+
+drop table if exists `${database}`.`siteuser`;
+create table if not exists `${database}`.`siteuser` (
+    siteuserid mediumint(8) unsigned not null auto_increment,
+    emailAddress varchar(96) not null unique,
+    username varchar(32) not null unique,
+    password varchar(255) not null,
+    genderid smallint(4) unsigned null default null, 
+    lastName varchar(64) null default null,
+    firstName varchar(64) null default null,
+    dateOfBirth date null default null,
+    phoneNumber1 varchar(32) null default null,
+    phoneNumber2 varchar(32) null default null,
+    addressid mediumint(8) unsigned null default null, 
+    logo varchar(255) null default null, 
+    image varchar(255) null default null,
+    url varchar(255) null default null, 
+    userstatusid smallint(4) unsigned DEFAULT '1',
+    currencyid smallint(4) unsigned not null default '566', 
+    howdidyoufindusid smallint(4) unsigned null default null, 
+    datecreated datetime not null,
+    timemodified timestamp not null default current_timestamp on update current_timestamp,
+    primary key(siteuserid)
+)ENGINE=INNODB DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+
+--------------------------------
+-- Made to conform to schema.org
+-------------------------------- 
+drop table if exists `${database}`.`brand`;
+create table if not exists `${database}`.`brand`
+(   
+    brandid smallint(4) unsigned not null,   
+    brandName varchar(64) not null,   
+    description varchar(255) null default null,
+    logo varchar(255) null default null,
+    image varchar(255) null default null,
+    url varchar(255) null default null,
+    primary key(brandid)
+)ENGINE=INNODB DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+
+drop table if exists `${database}`.`product`; 
+create table if not exists `${database}`.`product` 
+(
+    productid mediumint(8) unsigned not null auto_increment, 
+    productName varchar(64) not null,  
+    productcategoryid smallint(4) unsigned not null, 
+    productsubcategoryid smallint(4) unsigned not null default '13', 
+    productstatusid smallint(4) unsigned not null default '1', 
+    brandid smallint(4) unsigned null default null, 
+    model varchar(64) null default null, 
+    weight decimal(5,2) null default null,
+    description varchar(10000) null default null,
+    logo varchar(255) null default null,
+    image varchar(255) null default null, 
+    url varchar(255) null default null, 
+    isRelatedTo mediumint(8) unsigned null default null,
+    minimumOrderQuantity mediumint(8) unsigned not null default '1',
+    dateOfManufacture date null default null,
+    keywords varchar(96) null default null,
+    ratingPercent smallint(4) unsigned null default null,
+    views mediumint(8) unsigned not null default '0',
+    datecreated datetime not null,
+    timemodified timestamp not null default current_timestamp on update current_timestamp,
+    primary key(productid)
+)ENGINE=INNODB DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+
+drop table if exists `${database}`.`productunit`; 
+create table if not exists `${database}`.`productunit` 
+(
+    productunitid mediumint(8) unsigned not null auto_increment, 
+    productid mediumint(8) unsigned not null, 
+    color char(9) null default null,
+    productSize varchar(8) null default null,
+    quantityInStock mediumint(8) unsigned not null default '1',
+    primary key(productunitid)
+)ENGINE=INNODB DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+
+drop table if exists `${database}`.`offer`; 
+create table if not exists `${database}`.`offer` 
+(
+    offerid mediumint(8) unsigned not null auto_increment,
+    itemOffered mediumint(8) unsigned not null,
+    availabilityid smallint(4) unsigned not null default '1', 
+    availabilityStarts datetime null default null,
+    availabilityEnds datetime null default null,
+    availableAtOrFrom mediumint(8) unsigned null default null, 
+    price decimal(12,4) null default null,
+    discount decimal(12,4) null default null,
+    currencyid smallint(4) unsigned null default '566',
+    seller mediumint(8) unsigned not null, 
+    validFrom datetime null default null,
+    validThrough datetime null default null,
+    datecreated datetime not null,
+    timemodified timestamp not null default current_timestamp on update current_timestamp,
+    primary key(offerid)
+)ENGINE=INNODB DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+
+drop table if exists `${database}`.`productcomment`;
+create table if not exists `${database}`.`productcomment` (
+    productcommentid mediumint(8) unsigned not null auto_increment,
+    productid mediumint(8) unsigned not null unique,
+    author mediumint(8) unsigned null default null, 
+    headline varchar(64) null default null,
+    commentText varchar(10000) not null, 
+    keywords varchar(96) null default null,
+    repliedto mediumint(8) unsigned null default null,
+    datecreated datetime not null,
+    timemodified timestamp not null default current_timestamp on update current_timestamp,
+    primary key(productcommentid)
+)ENGINE=INNODB DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+
+drop table if exists `${database}`.`productorder`;
+create table if not exists `${database}`.`productorder` (
+    productorderid mediumint(8) unsigned not null auto_increment,
+    buyer mediumint(8) unsigned not null,
+    orderstatusid smallint(4) unsigned not null default '1',
+    orderDate datetime null default null,
+    requiredDate datetime null default null,
+    paymentid mediumint(8) unsigned null default null,
+    shippingid mediumint(8) unsigned null default null,
+    datecreated datetime not null,
+    timemodified timestamp not null default current_timestamp on update current_timestamp,
+    primary key(productorderid)
+)ENGINE=INNODB DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+
+drop table if exists `${database}`.`orderproduct`;
+create table if not exists `${database}`.`orderproduct` (
+    orderproductid mediumint(8) unsigned not null auto_increment,
+    productorderid mediumint(8) unsigned not null,
+    productid mediumint(8) unsigned not null,
+    price decimal(12,4) null default null,
+    discount decimal(12,4) null default null,
+    currencyid smallint(4) unsigned not null default '566', 
+    quantity mediumint(8) unsigned not null default '1',
+    datecreated datetime not null,
+    timemodified timestamp not null default current_timestamp on update current_timestamp,
+    primary key(orderproductid)
+)ENGINE=INNODB DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+
+drop table if exists `${database}`.`userpaymentmethod`;
+create table if not exists `${database}`.`userpaymentmethod` (
+    userpaymentmethodid mediumint(8) unsigned not null auto_increment,
+    paymentmethodid smallint(4) unsigned not null, 
+    paymentmethoduser mediumint(8) unsigned not null,
+    paymentMethodUsername varchar(64) null default null, 
+    paymentMethodNumber varchar(64) null default null, 
+    code varchar(8) null default null,
+    billingAddress mediumint(8) unsigned null default null,
+    expiryDate date null default null,
+    datecreated datetime not null,
+    timemodified timestamp not null default current_timestamp on update current_timestamp,
+    primary key(userpaymentmethodid)
+)ENGINE=INNODB DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+
+drop table if exists `${database}`.`payment`;
+create table if not exists `${database}`.`payment` (
+    paymentid mediumint(8) unsigned not null auto_increment,
+    productorderid mediumint(8) unsigned not null unique,
+    userpaymentmethodid mediumint(8) unsigned not null,
+    paymentAmount decimal(12,4) not null,
+    currencyid smallint(4) unsigned not null default '566',
+    paymentCode char(16) not null,
+    datecreated datetime not null,
+    timemodified timestamp not null default current_timestamp on update current_timestamp,
+    primary key(paymentid)
+)ENGINE=INNODB DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+
+drop table if exists `${database}`.`shippingdetails`;
+create table if not exists `${database}`.`shippingdetails` (
+    shippingdetailsid mediumint(8) unsigned not null auto_increment,
+    productorderid mediumint(8) unsigned not null unique,
+    shippingMethod varchar(64) null default null,
+    shipDate datetime null default null,
+    estimatedArrivalDate datetime null default null,
+    datecreated datetime not null,
+    timemodified timestamp not null default current_timestamp on update current_timestamp,
+    primary key(shippingdetailsid)
+)ENGINE=INNODB DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci;
+
+
+
+

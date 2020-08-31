@@ -1,0 +1,46 @@
+alter table `${database}`.`region` add foreign key (countryid) references country(countryid) on delete cascade on update cascade;
+
+alter table `${database}`.`productsubcategory` add foreign key (productcategoryid) references productcategory(productcategoryid) on delete cascade on update cascade;
+
+alter table `${database}`.`address` add foreign key (countryid) references country(countryid) on delete cascade on update cascade;
+alter table `${database}`.`address` add foreign key (regionid) references region(regionid) on delete cascade on update cascade;
+
+alter table `${database}`.`siteuser` add foreign key (genderid) references gender(genderid) on delete cascade on update cascade;
+alter table `${database}`.`siteuser` add foreign key (addressid) references address(addressid) on delete cascade on update cascade;
+alter table `${database}`.`siteuser` add foreign key (userstatusid) references userstatus(userstatusid) on delete cascade on update cascade;
+alter table `${database}`.`siteuser` add foreign key (currencyid) references currency(currencyid) on delete cascade on update cascade;
+alter table `${database}`.`siteuser` add foreign key (howdidyoufindusid) references howdidyoufindus(howdidyoufindusid) on delete cascade on update cascade;
+
+alter table `${database}`.`product` add foreign key (productcategoryid) references productcategory(productcategoryid) on delete cascade on update cascade; 
+alter table `${database}`.`product` add foreign key (productsubcategoryid) references productsubcategory(productsubcategoryid) on delete cascade on update cascade; 
+alter table `${database}`.`product` add foreign key (productstatusid) references productstatus(productstatusid) on delete cascade on update cascade; 
+alter table `${database}`.`product` add foreign key (brandid) references brand(brandid) on delete cascade on update cascade; 
+
+alter table `${database}`.`productunit` add foreign key (productid) references product(productid) on delete cascade on update cascade; 
+
+alter table `${database}`.`offer` add foreign key (itemOffered) references product(productid) on delete cascade on update cascade; 
+alter table `${database}`.`offer` add foreign key (availabilityid) references availability(availabilityid) on delete cascade on update cascade; 
+alter table `${database}`.`offer` add foreign key (availableAtOrFrom) references address(addressid) on delete cascade on update cascade; 
+alter table `${database}`.`offer` add foreign key (currencyid) references currency(currencyid) on delete cascade on update cascade; 
+alter table `${database}`.`offer` add foreign key (seller) references siteuser(siteuserid) on delete cascade on update cascade; 
+
+alter table `${database}`.`productcomment` add foreign key (productid) references product(productid) on delete cascade on update cascade; 
+alter table `${database}`.`productcomment` add foreign key (author) references siteuser(siteuserid) on delete cascade on update cascade; 
+
+alter table `${database}`.`userpaymentmethod` add foreign key (paymentmethodid) references paymentmethod(paymentmethodid) on delete cascade on update cascade; 
+alter table `${database}`.`userpaymentmethod` add foreign key (paymentmethoduser) references siteuser(siteuserid) on delete cascade on update cascade; 
+alter table `${database}`.`userpaymentmethod` add foreign key (billingAddress) references address(addressid) on delete cascade on update cascade; 
+
+alter table `${database}`.`payment` add foreign key (productorderid) references productorder(productorderid) on delete cascade on update cascade; 
+alter table `${database}`.`payment` add foreign key (userpaymentmethodid) references userpaymentmethod(userpaymentmethodid) on delete cascade on update cascade; 
+alter table `${database}`.`payment` add foreign key (currencyid) references currency(currencyid) on delete cascade on update cascade; 
+
+alter table `${database}`.`productorder` add foreign key (buyer) references siteuser(siteuserid) on delete cascade on update cascade; 
+alter table `${database}`.`productorder` add foreign key (orderstatusid) references orderstatus(orderstatusid) on delete cascade on update cascade; 
+alter table `${database}`.`productorder` add foreign key (paymentid) references payment(paymentid) on delete cascade on update cascade; 
+
+alter table `${database}`.`orderproduct` add foreign key (productorderid) references productorder(productorderid) on delete cascade on update cascade; 
+alter table `${database}`.`orderproduct` add foreign key (productid) references product(productid) on delete cascade on update cascade; 
+alter table `${database}`.`orderproduct` add foreign key (currencyid) references currency(currencyid) on delete cascade on update cascade; 
+
+alter table `${database}`.`shippingdetails` add foreign key (productorderid) references productorder(productorderid) on delete cascade on update cascade; 
