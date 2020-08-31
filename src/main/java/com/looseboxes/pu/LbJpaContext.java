@@ -6,7 +6,9 @@ import com.bc.jpa.dao.sql.MySQLDateTimePatterns;
 import com.bc.jpa.dao.sql.SQLDateTimePatterns;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
+import java.util.Properties;
 
 /**
  * @(#)IdiscControllerFactory.java   22-Aug-2014 14:14:23
@@ -55,5 +57,24 @@ public class LbJpaContext extends JpaContextImpl {
 
     public LbJpaContext(File persistenceFile, SQLDateTimePatterns dateTimePatterns) throws IOException {
         super(persistenceFile, dateTimePatterns, References.ENUM_TYPES);
+    }
+
+    @Override
+    public Properties getPersistenceUnitProperties(String persistenceUnit) {
+        InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("looseboxespu.env");
+        if(in != null) {
+            try{
+                Properties p = new Properties();
+                p.load(in);
+                return p;
+            }catch(IOException e){
+                throw new RuntimeException(e.getMessage(), e);
+            }finally{
+                try{
+                    in.close();
+                }catch(IOException e) { e.printStackTrace(); }
+            }
+        }
+        return super.getPersistenceUnitProperties(persistenceUnit);
     }
 }
